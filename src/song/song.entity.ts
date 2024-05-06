@@ -10,6 +10,4 @@ export class Song {
     
     @Column()
     year: string;
-
-    
 }
