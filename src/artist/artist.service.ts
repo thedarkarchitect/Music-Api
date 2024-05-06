@@ -42,22 +42,36 @@ export class ArtistService {
         return artistExists;
     }
 
-    async updateArtist(id: number, updateArtistDto: UpdateArtistDto): Promise<string> {
-        const artist = this.getArtistById(id);
-        const update = await this.artistRepository.update((await artist).id ,updateArtistDto);
+    async updateArtist(id: number, updateArtistDto: UpdateArtistDto): Promise<{status: string, artist?: Artist}> {
+        const artist = await this.artistRepository.findOneBy({id:id}) //gets the artist by id
+
+        if(!artist){//artist does not exist
+            throw new NotFoundException(`Artist with this ID ${id} not found.`)
+        }
+
+        Object.assign(artist, updateArtistDto);//will update artist fields right away by comparing the two objects
+        
+        const update = await this.artistRepository.save(artist)//this updates the artist in the db
         if(update){
-            return "Artist updated"
+            return {status: "Artist updated", artist: update}
         } else {
-            return "Artist was not updated"
+            return {status: "Artist not updated successfully"}
         }
     }   
 
-    async deleteArtist(id: number): Promise<string> {
+    async deleteArtist(id: number): Promise<{status: string, artist?: Artist}> {
+        const artist = await this.artistRepository.findOneBy({id:id});
+
+        if(!artist) {
+            throw new NotFoundException(`Artist with this ID ${id} not found.`)
+        }
+
         const deleted = await this.artistRepository.delete(id);
+
         if(deleted){
-            return "Artist Deleted"
+            return {status: "Artist deleted succcessfully", artist: artist}
         } else {
-            return "Artist unsuccessful delete"
+            return { status: "Artist not deleted"}
         }
     }
 }

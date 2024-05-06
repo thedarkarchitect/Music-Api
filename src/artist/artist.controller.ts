@@ -25,12 +25,12 @@ export class ArtistController {
 
 
     @Patch(":id")
-    async updateArtist(@Param("id") id: string, @Body() updateArtistDto: UpdateArtistDto): Promise<string> {
+    async updateArtist(@Param("id") id: string, @Body() updateArtistDto: UpdateArtistDto): Promise<{status: string, artist?: Artist}> {
         return await this.artistService.updateArtist(Number(id), updateArtistDto)
     }
 
     @Delete(":id")
-    async deleteArtist(@Param("id") id: string): Promise<string>{
+    async deleteArtist(@Param("id") id: string): Promise<{status: string, artist?: Artist}>{
         return await this.artistService.deleteArtist(Number(id));
     }
 }
