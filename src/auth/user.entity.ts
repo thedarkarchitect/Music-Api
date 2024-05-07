@@ -21,6 +21,6 @@ export class User {
     @Column()
     gender: string
 
-    @OneToMany(() => Song, (song) => song.user, { eager: true })
+    @OneToMany((_type) => Song, (song) => song.user, { eager: true })
     songs: Song[];
 }

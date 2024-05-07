@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { SongModule } from './song/song.module';
-import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import 'dotenv/config';
 
 @Module({
   imports: [
     SongModule, 
-    UserModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -17,7 +16,8 @@ import 'dotenv/config';
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
       synchronize: true,
-    })
+    }),
+    AuthModule
   ]
 })
 
