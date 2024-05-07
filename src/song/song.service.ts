@@ -4,6 +4,7 @@ import { SongRepository } from './song.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createSongDto } from './dto/create-song.dto';
 import { updateSongDto } from './dto/update-song.dto';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class SongService {
@@ -16,21 +17,23 @@ export class SongService {
         return await this.songRepository.find();
     }
 
-    async createSong(createSongDto: createSongDto): Promise<Song>{
-        const { title, year } = createSongDto
+    async createSong(createSongDto: createSongDto, user: User): Promise<Song>{
+        const { title, year, genre } = createSongDto
 
-        const song = this.songRepository.create({ //this fill the fields in the db
+        const song = this.songRepository.create({
             title,
             year,
+            genre,
+            user
         });
 
         await this.songRepository.save(song); //interaction with db happens here
         return song;
     }
 
-    async getSongById(id: number): Promise<Song> {
+    async getSongById(id: number, user: User): Promise<Song> {
         const song = await this.songRepository.findOneBy({
-            id: id
+            id: id,  user
         });
         if(!song){
             throw new NotFoundException(`Song with ID ${id} not found`);
@@ -38,8 +41,8 @@ export class SongService {
         return song;
     }
 
-    async updateSongById(id: number, updateSongDto: updateSongDto): Promise<{status: string, song?: Song}> {
-        const song = await this.songRepository.findOneBy({id:id});
+    async updateSongById(id: number, updateSongDto: updateSongDto, user: User): Promise<{status: string, song?: Song}> {
+        const song = await this.songRepository.findOneBy({id:id, user});
 
         if(!song) {
             throw new NotFoundException(`Song with this ID ${id} not found.`)
@@ -54,8 +57,8 @@ export class SongService {
         }
     }
 
-    async deleteSong(id: number): Promise<{status: string, song?: Song}> {
-        const song = await this.songRepository.findOneBy({id:id});
+    async deleteSong(id: number, user: User): Promise<{status: string, song?: Song}> {
+        const song = await this.songRepository.findOneBy({id:id, user});
 
         if(!song) {
             throw new NotFoundException(`Song with this ID ${id} not found.`)

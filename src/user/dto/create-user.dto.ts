@@ -1,4 +1,5 @@
 import { IsString, MaxLength, MinLength } from "class-validator";
+import { UserGender } from "./user-gender.enum";
 
 export class createUserDto {
     @IsString()
@@ -11,5 +12,5 @@ export class createUserDto {
     password: string;
     country: string;
     born: string;
-    gender: string;
+    gender: UserGender;
 }

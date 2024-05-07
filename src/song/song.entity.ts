@@ -18,5 +18,5 @@ export class Song {
 
     @ManyToOne(() => User, (User) => User.songs, { eager: false })
     @Exclude({ toPlainOnly: true })
-    user: User[]
+    user: User
 }
