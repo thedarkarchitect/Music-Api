@@ -1,10 +1,12 @@
-import { Controller, Get, Body, Param, Patch, Delete, Post } from '@nestjs/common';
+import { Controller, Get, Body, Param, Patch, Delete, Post, UseGuards } from '@nestjs/common';
 import { Song } from './song.entity';
 import { SongService } from './song.service';
 import { createSongDto } from './dto/create-song.dto';
 import { updateSongDto } from './dto/update-song.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('song')
+@UseGuards(AuthGuard())
 export class SongController {
     constructor(private readonly songService: SongService){}
 

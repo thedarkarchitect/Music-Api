@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Song } from 'src/song/song.entity';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+
 
 @Entity()
 export class Artist {
@@ -20,7 +22,7 @@ export class Artist {
     @Column()
     gender: string
 
-    // @OneToMany(() => SongController, song => song.artist)
-    // songs: Song[];
+    @OneToMany(() => Song, song => song.artist)
+    songs: Song[];
     
 }
