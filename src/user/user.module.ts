@@ -22,6 +22,6 @@ import { JwtStrategy } from './dto/jwt.strategy';
   ],
   controllers: [UserController],
   providers: [UserService, JwtStrategy],
-  exports: [JwtStrategy, PassportModule]
+  exports: [JwtStrategy, PassportModule] //all modules that import this module benefit from the export
 })
 export class UserModule {}

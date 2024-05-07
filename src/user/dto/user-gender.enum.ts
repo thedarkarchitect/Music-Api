@@ -1,4 +1,4 @@
-export enum ArtistGender {
+export enum UserGender {
     Male = "Male",
     Female = "Female",
     Other = "Other"

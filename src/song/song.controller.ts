@@ -6,7 +6,7 @@ import { updateSongDto } from './dto/update-song.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('song')
-@UseGuards(AuthGuard())
+// @UseGuards(AuthGuard())
 export class SongController {
     constructor(private readonly songService: SongService){}
 

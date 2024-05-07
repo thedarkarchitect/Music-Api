@@ -1,5 +1,5 @@
-import { Artist } from "src/artist/artist.entity";
-import { RecordingCompany } from "src/recording-company/recording-company.entity";
+import { Exclude } from "class-transformer";
+import { User } from "src/user/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -13,9 +13,10 @@ export class Song {
     @Column()
     year: string;
 
-    @ManyToOne(() => Artist, artist => artist.songs)
-    artist: Artist
+    @Column()
+    genre: string;
 
-    @ManyToOne(() => RecordingCompany, recordingCompany => recordingCompany.songs)
-    recordingCompany: RecordingCompany;
+    @ManyToOne(() => User, (User) => User.songs, { eager: false })
+    @Exclude({ toPlainOnly: true })
+    user: User[]
 }

@@ -22,15 +22,17 @@ export class UserService {
     }
 
     async createUser(createUserDto: createUserDto): Promise<User>{
-        const { username, email, password } = createUserDto
+        const { name, password, country, born, gender } = createUserDto
 
         const salt = await bcrypt.genSalt();
-        const hash = await bcrypt.hash(password, 10);
+        const hash = await bcrypt.hash(password, salt);
 
         const user = this.userRepository.create({
-            username,
-            email,
-            password: hash
+            name,
+            password: hash,
+            country,
+            born,
+            gender
         });
 
         await this.userRepository.save(user); //interaction with db happens here
@@ -38,13 +40,13 @@ export class UserService {
     }
 
     async loginUser(authUserDto: authUserDto): Promise<{ accessToken: string}> {
-        const { username, password } = authUserDto;
+        const { name, password } = authUserDto;
 
-        const login = this.userRepository.findOneBy({ username: username });
+        const login = await this.userRepository.findOneBy({ name: name });
 
-        if(login && (await bcrypt.compare(password, (await login).password))) {
-            const payload: JwtPayload = { username };
-            const accessToken: string = await this.jwtService.sign(payload);
+        if(login && (await bcrypt.compare(password, login.password))) {
+            const payload: JwtPayload = { name };
+            const accessToken: string = this.jwtService.sign(payload);
             return { accessToken };
         } else {
             throw new UnauthorizedException("Please check your login credentials")
